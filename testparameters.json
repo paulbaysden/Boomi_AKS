@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "rgName": {
+            "defaultValue": "armtest2",
+            "type": "String"
+        },
+        "rgLocation": {
+            "defaultValue": "westus",
+            "type": "String"
+        },
+        "vnetname": {
+            "defaultValue": "VnetTest",
+            "type": "String"
+        },
+        "vnetCidr": {
+            "defaultValue": "10.0.0.0/16",
+            "type": "String"
+        },
+        "subnet1name": {
+            "defaultValue": "subnetTest",
+            "type": "String"
+        },
+        "subnet1Cidr": {
+            "defaultValue": "10.0.0.0/24",
+            "type": "String"
+        },
+        "storagePrefix": {
+            "defaultValue": "test",
+            "type": "string",
+            "maxLength": 11
+        }
+    }
+}
