@@ -1,0 +1,30 @@
+{
+   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {},
+   "variables": {},
+   "resources": [
+      {
+         "type": "Microsoft.Network/virtualNetworks",
+         "apiVersion": "2020-06-01",
+         "name": "[parameters('vnetname')]",
+         "location": "[parameters('rgLocation')]",
+         "properties": {
+            "addressSpace": {
+            "addressPrefixes": [
+               "[parameters('vnetCidr')]"
+           ]
+          },
+         "subnets": [
+             {
+                "name": "[parameters('subnet1name')]",
+                "properties": {
+                   "addressPrefix": "[parameters('subnet1Cidr')]"
+                   }
+                }
+          ]
+        }
+     }
+  ],
+  "outputs": {}
+}
