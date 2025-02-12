@@ -35,6 +35,14 @@ resource "azurerm_subnet" "aks_subnet" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.2.0/24"]
+  # No delegation for AKS subnet
+}
+
+resource "azurerm_subnet" "netapp_subnet" {
+  name                 = "netappSubnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.3.0/24"]
 
   delegation {
     name = "netapp-delegation"
@@ -163,7 +171,7 @@ resource "azurerm_netapp_volume" "netapp_volume" {
   pool_name           = azurerm_netapp_pool.netapp_pool.name
   volume_path         = "nfs-volume"
   service_level       = "Premium"
-  subnet_id           = azurerm_subnet.aks_subnet.id
+  subnet_id           = azurerm_subnet.netapp_subnet.id
   storage_quota_in_gb = 100
   protocols           = ["NFSv4.1"]
 
