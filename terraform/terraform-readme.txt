@@ -21,6 +21,13 @@ Then restart command prompt again
 terraform version // to verify install
 terraform init // start terraform services
 
-Install Git:
-Windows Install:
+cd into directory or git branch your terraform scripts are in:
+
+update the variables.tf file on your branch and update "default" values to the names you want for services.
+
+terraform init
+terraform plan
+terraform apply // deploys your main.tf 
+
+terraform destroy // deletes everything (it will fail on netapp volume, you will have to manually delete it before you run destroy)
 
