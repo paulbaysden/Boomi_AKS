@@ -4,11 +4,24 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">=3.0"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">=1.14.0"
+    }
   }
 }
-
 provider "azurerm" {
   features {}
+}
+
+provider "kubectl" {
+  host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
+  client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
+  client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
+  load_config_file       = false
+
+  
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -181,5 +194,23 @@ resource "azurerm_netapp_volume" "netapp_volume" {
     protocols_enabled = ["NFSv4.1"]
     unix_read_only   = false
     unix_read_write  = true
+    root_access_enabled  = true  # Allow root access
+    
   }
+}
+
+output "netapp_server" {
+  value = azurerm_netapp_volume.netapp_volume.mount_ip_addresses[0]
+}
+
+output "netapp_path" {
+  value = "/${azurerm_netapp_volume.netapp_volume.volume_path}"
+}
+
+resource "kubectl_manifest" "k8s_resources" {
+  for_each  = fileset("${path.module}/yaml_files/", "*.yaml.tpl")
+  yaml_body = templatefile("${path.module}/yaml_files/${each.value}", {
+    netapp_server = azurerm_netapp_volume.netapp_volume.mount_ip_addresses[0]
+    netapp_path   = "/${azurerm_netapp_volume.netapp_volume.volume_path}"
+  })
 }
