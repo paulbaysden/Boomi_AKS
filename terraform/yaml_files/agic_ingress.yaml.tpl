@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: azure/application-gateway
 spec:
   rules:
-    - host: // need to define still
+    - host: # need to define still
       http:
         paths:
           - path: /
